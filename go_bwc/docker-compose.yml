@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  bwc-system:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: forensic-bwc-system
+    image: bwc-system:latest
+    restart: unless-stopped
+    
+    # Environment variables
+    environment:
+      - TZ=UTC
+      - STORAGE_PATH=/app/bwc_storage
+    
+    # Volume mounts for persistent storage
+    volumes:
+      - ./bwc_storage:/app/bwc_storage
+      - ./evidence_data:/app/evidence_data:ro
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 512M
+    
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    
+    # Read-only root filesystem (except for storage)
+    read_only: true
+    tmpfs:
+      - /tmp
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Networks
+    networks:
+      - bwc-network
+
+  # Optional: PostgreSQL database for production
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: bwc-postgres
+  #   restart: unless-stopped
+  #   environment:
+  #     - POSTGRES_DB=bwc_system
+  #     - POSTGRES_USER=bwc_admin
+  #     - POSTGRES_PASSWORD=changeme
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - bwc-network
+
+  # Optional: Redis for caching
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: bwc-redis
+  #   restart: unless-stopped
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - bwc-network
+
+networks:
+  bwc-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

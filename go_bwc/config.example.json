@@ -1,0 +1,113 @@
+{
+  "system": {
+    "name": "Forensic BWC Management System",
+    "version": "1.0.0",
+    "environment": "production"
+  },
+  "storage": {
+    "path": "./bwc_storage",
+    "max_file_size_mb": 5120,
+    "allowed_extensions": [".mp4", ".avi", ".mov", ".mkv", ".webm"],
+    "retention_days": 2555,
+    "backup_enabled": true,
+    "backup_path": "./backups",
+    "compression_enabled": false
+  },
+  "security": {
+    "hash_algorithm": "SHA-256",
+    "enable_encryption": false,
+    "encryption_algorithm": "AES-256-GCM",
+    "require_2fa": false,
+    "session_timeout_minutes": 30,
+    "max_login_attempts": 5,
+    "password_min_length": 12
+  },
+  "integrity": {
+    "auto_verify_on_access": true,
+    "verify_on_transfer": true,
+    "scheduled_verification_enabled": true,
+    "verification_interval_hours": 24,
+    "alert_on_failure": true,
+    "alert_email": "security@example.com"
+  },
+  "audit": {
+    "enabled": true,
+    "log_all_access": true,
+    "retention_days": 2555,
+    "export_format": "json",
+    "enable_syslog": false,
+    "syslog_server": "syslog.example.com:514"
+  },
+  "chain_of_custody": {
+    "require_purpose": true,
+    "require_signature": false,
+    "verify_integrity_on_transfer": true,
+    "min_custody_note_length": 10
+  },
+  "api": {
+    "enabled": false,
+    "host": "0.0.0.0",
+    "port": 8080,
+    "enable_tls": true,
+    "tls_cert_path": "./certs/server.crt",
+    "tls_key_path": "./certs/server.key",
+    "rate_limit_per_minute": 100,
+    "cors_enabled": false,
+    "cors_origins": ["https://example.com"]
+  },
+  "database": {
+    "type": "memory",
+    "host": "localhost",
+    "port": 5432,
+    "name": "bwc_system",
+    "user": "bwc_admin",
+    "ssl_mode": "require",
+    "max_connections": 100,
+    "connection_timeout_seconds": 30
+  },
+  "notifications": {
+    "enabled": false,
+    "smtp_host": "smtp.example.com",
+    "smtp_port": 587,
+    "smtp_user": "notifications@example.com",
+    "smtp_use_tls": true,
+    "alert_recipients": [
+      "admin@example.com",
+      "security@example.com"
+    ]
+  },
+  "video_processing": {
+    "enabled": false,
+    "generate_thumbnails": true,
+    "thumbnail_interval_seconds": 30,
+    "extract_metadata": true,
+    "enable_transcoding": false,
+    "target_format": "mp4",
+    "target_resolution": "1080p"
+  },
+  "compliance": {
+    "jurisdiction": "US",
+    "cjis_compliant": true,
+    "gdpr_compliant": false,
+    "retention_policy": "7_years",
+    "auto_delete_after_retention": false,
+    "require_legal_hold_check": true
+  },
+  "performance": {
+    "max_concurrent_ingests": 10,
+    "max_concurrent_verifications": 5,
+    "enable_caching": true,
+    "cache_ttl_minutes": 60,
+    "enable_compression": true
+  },
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "output": "stdout",
+    "file_path": "./logs/bwc-system.log",
+    "max_size_mb": 100,
+    "max_backups": 10,
+    "max_age_days": 30,
+    "compress": true
+  }
+}
